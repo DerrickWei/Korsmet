@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Credit Memo - {{ credit_info.number }}</title>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.css" rel="stylesheet" media="all" />
+<script type="text/javascript" src="catalog/view/javascript/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="catalog/view/javascript/bootstrap/js/bootstrap.min.js"></script>
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" href="catalog/view/stylesheet/stylesheet.css" rel="stylesheet" media="all" />
+</head>
+<body>
+<div class="container" style="width: 85%; margin-top: 2%;">
+  	<div style="page-break-after: always;">
+    	<h1>Korsmet Inc.</h1>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<td style="width: 50%;">
+						<address><b>Korsmet Inc. </b><br />
+						135 Pony Dr, Newmarket, ON L3Y 7B5</address>
+					</td>
+					<td style="width: 50%;">
+						<b>{{ text_memo_number }}</b>: {{ credit_info.number }} 
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<td style="width: 50%;"><b>{{ text_billing }}</b></td>
+					<td style="width: 50%;"><b>{{ text_selling }}</b></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><address>
+						{{ credit_info.billingPostalAddress.street }}, <br />{{ credit_info.billingPostalAddress.city }}, {{ credit_info.billingPostalAddress.state }} {{ credit_info.billingPostalAddress.postalCode }} 
+						</address></td>
+					<td><address>
+						{{ credit_info.sellingPostalAddress.street }}, <br />{{ credit_info.sellingPostalAddress.city }}, {{ credit_info.sellingPostalAddress.state }} {{ credit_info.sellingPostalAddress.postalCode }} 
+						</address></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<td><b>{{ column_number }}</b></td>
+				<td><b>{{ column_name }}</b></td>
+				<td class="text-right"><b>{{ column_quantity }}</b></td>
+				<td class="text-right"><b>{{ column_unit_price }}</b></td>
+				<td class="text-right"><b>{{ column_total_price }}</b></td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in credit_info.salesCreditMemoLines %}
+					{% if product.lineType == 'Item' %}
+						<tr>
+							<td>{{ product.lineDetails.number }}</td>
+							<td>{{ product.lineDetails.displayName }}</td>
+							<td class="text-right">{{ product.quantity }}</td>
+							<td class="text-right">{{ product.unitPrice }}</td>
+							<td class="text-right">{{ product.amountExcludingTax }}</td>
+						</tr>
+					{% elseif product.lineType == 'Comment' %}
+						<tr>
+							<td>{{ product.lineType }}</td>
+							<td class="text-left" colspan="4">{{ product.description }}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+				<tr>
+					<td class="text-right" colspan="4"><b>{{ text_subtotal }}</b></td>
+					<td class="text-right">{{ credit_info.totalAmountExcludingTax }}</td>
+				</tr>
+				{% if credit_info.discountAmount %}
+				<tr>
+					<td class="text-right" colspan="4"><b>{{ text_discount }}</b></td>
+					<td class="text-right">{{ credit_info.discountAmount }}</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<td class="text-right" colspan="4"><b>{{ text_tax }}</b></td>
+					<td class="text-right">{{ credit_info.totalTaxAmount }}</td>
+				</tr>
+				<tr>
+					<td class="text-right" colspan="4"><b>{{ text_total_amount }}</b></td>
+					<td class="text-right">{{ credit_info.totalAmountIncludingTax }}</td>
+				</tr>
+			</tbody>
+		</table>
+  	</div>
+</div>
+</body>
+</html>

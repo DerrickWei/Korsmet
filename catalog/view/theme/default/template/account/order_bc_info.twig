@@ -1,0 +1,139 @@
+{{ header }}
+<div id="account-order" class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endfor %}
+	</ul>
+	{% if success %}
+	<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+	<div class="row">{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-sm-9' %}
+		{% else %}
+		{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">{{ content_top }}
+			<h2>{{ heading_title }}</h2>
+			<table class="table table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-left" colspan="2">{{ text_order_detail }}</td>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td class="text-left"><b>{{ text_order_number }}</b> #{{ order_info.number }}<br />
+					<b>{{ text_date_added }}</b> {{ order_info.orderDate }}</td>
+				</tr>
+				</tbody>
+			</table>
+			<table class="table table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-left" style="width: 50%; vertical-align: top;">{{ text_payment_address }}</td>
+					{% if order_info.shippingPostalAddress %}
+					<td class="text-left" style="width: 50%; vertical-align: top;">{{ text_shipping_address }}</td>
+					{% endif %} </tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td class="text-left"><address>
+						{{ order_info.billingPostalAddress.street }}, <br />{{ order_info.billingPostalAddress.city }}, {{ order_info.billingPostalAddress.state }} {{ order_info.billingPostalAddress.postalCode }} 
+						</address></td>
+					{% if order_info.shippingPostalAddress %}
+					<td class="text-left"><address>
+						{{ order_info.shippingPostalAddress.street }}, <br />{{ order_info.shippingPostalAddress.city }}, {{ order_info.shippingPostalAddress.state }} {{ order_info.shippingPostalAddress.postalCode }} 
+						</address></td>
+					{% endif %} </tr>
+				</tbody>
+			</table>
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+					<td class="text-left">{{ column_name }}</td>
+					<td class="text-left">{{ column_number }}</td>
+					<td class="text-right">{{ column_quantity }}</td>
+					<td class="text-right">{{ column_price }}</td>
+					<td class="text-right">{{ column_total }}</td>
+					{% if order_info.salesOrderLines %}
+					<td style="width: 20px;"></td>
+					{% endif %} </tr>
+				</thead>
+				<tbody>
+					{% for product in order_info.salesOrderLines %}
+					{% if product.lineType == 'Item' %}
+					<tr>
+						<td class="text-left">{{ product.lineDetails.displayName }}</td>
+						<td class="text-left">{{ product.lineDetails.number }}</td>
+						<td class="text-right">{{ product.quantity }}</td>
+						<td class="text-right">{{ product.unitPrice }}</td>
+						<td class="text-right">{{ product.amountExcludingTax }}</td>
+						<td class="text-right" style="white-space: nowrap;"><a href="{{ reorder_url }}&pid={{ product.itemId }}&qty={{ product.quantity }}&oid={{ order_info.id }}" data-toggle="tooltip" title="{{ button_reorder }}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a></td>
+					</tr>
+					{% elseif product.lineType == 'Comment' %}
+					<tr>
+						<td class="text_left">{{ product.lineType }}</td>
+						<td class="text-left" colspan="5">{{ product.description }}</td>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</tbody>
+				
+				<tfoot>
+					<tr>
+						<td colspan="3"></td>
+						<td class="text-right"><b>{{ text_subtotal }}l</b></td>
+						<td class="text-right">{{ order_info.totalAmountExcludingTax }}</td>
+						{% if order_info.salesOrderLines %}
+						<td></td>
+						{% endif %} 
+					</tr>
+					{% if order_info.discountAmount %}
+					<tr>
+						<td colspan="3"></td>
+						<td class="text-right"><b>{{ text_discount }}</b></td>
+						<td class="text-right">{{ order_info.discountAmount }}</td>
+						{% if order_info.salesOrderLines %}
+						<td></td>
+						{% endif %} 
+					</tr>
+					{% endif %}
+					<tr>
+						<td colspan="3"></td>
+						<td class="text-right"><b>{{ text_tax }}</b></td>
+						<td class="text-right">{{ order_info.totalTaxAmount }}</td>
+						{% if order_info.salesOrderLines %}
+						<td></td>
+						{% endif %} 
+					</tr>
+					<tr>
+						<td colspan="3"></td>
+						<td class="text-right"><b>{{ text_total_amount }}</b></td>
+						<td class="text-right">{{ order_info.totalAmountIncludingTax }}</td>
+						{% if order_info.salesOrderLines %}
+						<td></td>
+						{% endif %} 
+					</tr>
+				</tfoot>
+				
+			</table>
+		</div>
+		<div class="buttons clearfix">
+			<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+		</div>
+		{{ content_bottom }}</div>
+		{{ column_right }}</div>
+	</div>
+{{ footer }}

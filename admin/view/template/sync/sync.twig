@@ -1,0 +1,166 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<a target="_blank" href="{{ signin }}" data-toggle="tooltip" title="{{ button_signin }}" class="btn btn-warning"><i class="fa fa-refresh"></i> {{ button_signin }}</a>
+				<!-- <button type="button" data-toggle="tooltip" title="{{ button_sync_category }}" class="btn btn-info" id="button_sync_category"><i class="fa fa-tags fw"></i> {{ button_sync_category }}</button>
+				<button type="button" data-toggle="tooltip" title="{{ button_sync_item }}" class="btn btn-info" id="button_sync_item"><i class="fa fa-shopping-cart fw"></i> {{ button_sync_item }}</button>
+                <button type="button" data-toggle="tooltip" title="{{ button_sync_customer }}" class="btn btn-primary" id="button_sync_customer"><i class="fa fa-user fw"></i> {{ button_sync_customer }}</button> -->
+			</div>
+		<h1>{{ heading_title }}</h1>
+		<ul class="breadcrumb">
+			{% for breadcrumb in breadcrumbs %}
+			<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+			{% endfor %}
+		</ul>
+		</div>
+	</div>
+	<div class="container-fluid" id="sync_content">
+		<div class="col-md-3 col-md-push-9 col-sm-12 hidden-sm hidden-xs">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-list"></i> {{ text_sync }}</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<button type="button" data-toggle="tooltip" title="{{ button_sync_category }}" class="btn btn-info" id="button_sync_category"><i class="fa fa-tags fw"></i> {{ button_sync_category }}</button>
+					</div>
+					<div class="form-group">
+						<button type="button" data-toggle="tooltip" title="{{ button_sync_item }}" class="btn btn-success" id="button_sync_item"><i class="fa fa-shopping-cart fw"></i> {{ button_sync_item }}</button>
+					</div>
+					<div class="form-group">
+						<button type="button" data-toggle="tooltip" title="{{ button_sync_brand }}" class="btn btn-primary" id="button_sync_brand"><i class="fa fa-list fw"></i> {{ button_sync_brand }}</button>	
+					</div>
+					<div class="form-group">
+						<button type="button" data-toggle="tooltip" title="{{ button_sync_customer }}" class="btn btn-warning" id="button_sync_customer"><i class="fa fa-user fw"></i> {{ button_sync_customer }}</button>	
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 col-md-pull-3 col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-list"></i> {{ text_result }}</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}
+
+<script type="text/javascript">
+    $('#button_sync_category').on('click', function(e) {
+		e.preventDefault();
+
+		$.ajax ({
+			url: 'index.php?route=sync/sync/syncFromBusinessCentral&user_token={{ user_token }}&type=category',
+      		type: 'post',
+			dataType: 'json',	
+			beforeSend: function() {
+				$('#button_sync_category').button('loading');
+			},
+			complete: function() {
+				$('#button_sync_category').button('reset');
+			},
+			success: function(json) {
+				if (json['error']) {
+					$('#sync_content').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				if (json['success']) {
+					$('#sync_content').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				console.log(json);
+			}
+		});
+	});
+
+	$('#button_sync_item').on('click', function(e) {
+		e.preventDefault();
+
+		$.ajax ({
+			url: 'index.php?route=sync/sync/syncFromBusinessCentral&user_token={{ user_token }}&type=item',
+      		type: 'post',
+			dataType: 'json',	
+			beforeSend: function() {
+				$('#button_sync_item').button('loading');
+			},
+			complete: function() {
+				$('#button_sync_item').button('reset');
+			},
+			success: function(json) {
+				if (json['error']) {
+					$('#sync_content').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				if (json['success']) {
+					$('#sync_content').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				console.log(json);
+			}
+		});
+	});
+
+	$('#button_sync_brand').on('click', function(e) {
+		e.preventDefault();
+
+		$.ajax ({
+			url: 'index.php?route=sync/sync/syncFromBusinessCentral&user_token={{ user_token }}&type=brand',
+      		type: 'post',
+			dataType: 'json',	
+			beforeSend: function() {
+				$('#button_sync_brand').button('loading');
+			},
+			complete: function() {
+				$('#button_sync_brands').button('reset');
+			},
+			success: function(json) {
+				if (json['error']) {
+					$('#sync_content').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				if (json['success']) {
+					$('#sync_content').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				console.log(json);
+			}
+		});
+	});
+
+	$('#button_sync_customer').on('click', function(e) {
+		e.preventDefault();
+
+		$.ajax ({
+			url: 'index.php?route=sync/sync/syncCustomer&user_token={{ user_token }}',
+      		type: 'post',
+			dataType: 'json',	
+			beforeSend: function() {
+				$('#button_sync_customer').button('loading');
+			},
+			complete: function() {
+				$('#button_sync_customer').button('reset');
+			},
+			success: function(json) {
+				if (json['error']) {
+					$('#sync_content').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				if (json['success']) {
+					$('#sync_content').prepend('<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+
+				console.log(json);
+			}
+		});
+	});
+
+</script>

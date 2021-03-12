@@ -1,0 +1,146 @@
+	{{ header }}
+	<div id="account-order" class="container">
+	<ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endfor %}
+	</ul>
+	<div class="row">{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-sm-9' %}
+		{% else %}
+		{% set class = 'col-sm-12' %}
+		{% endif %}
+		<div id="content" class="{{ class }}">{{ content_top }}
+		<h1>{{ heading_title }}</h1>
+		{% if orders or posted_invoices %}
+		<div class="table-responsive" style="max-height:1000px; overflow:scroll; overflow-x:hidden;">
+			<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<td class="text-right"><b>{{ column_order_number }}</b></td>
+					<td class="text-left"><b>{{ column_invoice_number }}</b></td>
+					<td class="text-left"><b>{{ column_customer }}</b></td>
+					<td class="text-left"><b>{{ column_status }}</b></td>
+					<td class="text-left"><b>{{ column_total }}</b></td>
+					<td class="text-left"><b>{{ column_date_added }}</b></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+			{% for order in orders %}
+				<tr>
+					<td class="text-right"><b>#{{ order.order_number }}</b></td>
+					<td></td>
+					<td class="text-left">{{ order.name }}</td>
+					<td class="text-left">{{ order.status }}</td>
+					<td class="text-left">{{ order.total }}</td>
+					<td class="text-left">{{ order.date_added }}</td>
+					<td class="text-right"></td>
+				</tr>
+				<tr>
+					<td class="text-right"><b>#{{ order.order_number }}</b></td>
+					<td class="text-left"><b>{{ column_name }}</b></td>
+					<td class="text-left"><b>{{ column_number }}</b></td>
+					<td class="text-left"><b>{{ column_quantity }}</b></td>
+					<td class="text-left"><b>{{ column_price }}</b></td>
+					<td class="text-left"><b>{{ column_total }}</b></td>
+					<td class="text-right"></td>
+				</tr>
+				{% for product in order.order_line.salesOrderLines %}
+					{% if product.lineType == 'Item' %}
+					<tr>
+						<td></td>
+						<td class="text-left">{{ product.lineDetails.displayName }}</td>
+						<td class="text-left">{{ product.lineDetails.number }}</td>
+						<td class="text-left"><input type="text" class="form-control" name="qty" placeholder="qty" value="{{ product.quantity }}"/><input type="hidden" name="product_id" value="{{ product.itemId }}"/></td>
+						<td class="text-left">{{ product.unitPrice }}</td>
+						<td class="text-left">{{ product.amountExcludingTax }}</td>
+						<td class="text-right" style="white-space: nowrap;"><button style="font-size: 10px; line-height: 24px;" data-toggle="tooltip" title="{{ button_reorder }}" class="btn btn-primary btn-reorder"><i class="fa fa-shopping-cart"></i></butoon></td>
+					</tr>
+					{% elseif product.lineType == 'Comment' %}
+					<tr>
+						<td class="text_left">{{ product.lineType }}</td>
+						<td class="text-left" colspan="5">{{ product.description }}</td>
+					</tr>
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+			{% for invoice in posted_invoices %}
+				<tr>
+					<td class="text-right"><b>#{{ invoice.order_number }}</b></td>
+					<td class="text-left">#{{ invoice.number }}</td>
+					<td class="text-left">{{ invoice.name }}</td>
+					<td class="text-left">Completed</td>
+					<td class="text-left">{{ invoice.total_amount }}</td>
+					<td class="text-left">{{ invoice.date_added }}</td>
+					<td class="text-right"><a target="_blank" style="font-size: 10px; line-height: 24px;" href="{{ invoice.view }}" data-toggle="tooltip" title="{{ button_view }}" class="btn btn-info"><i class="fa fa-eye"></i></a></td>
+				</tr>
+				<tr>
+					<td class="text-right"><b>#{{ invoice.order_number }}</b></td>
+					<td class="text-left"><b>{{ column_name }}</b></td>
+					<td class="text-left"><b>{{ column_number }}</b></td>
+					<td class="text-left"><b>{{ column_quantity }}</b></td>
+					<td class="text-left"><b>{{ column_price }}</b></td>
+					<td class="text-left"><b>{{ column_total }}</b></td>
+					<td class="text-right"></td>
+				</tr>
+				{% for product in invoice.invoice_line.salesInvoiceLines %}
+					{% if product.lineType == 'Item' %}
+					<tr>
+						<td></td>
+						<td class="text-left">{{ product.lineDetails.displayName }}</td>
+						<td class="text-left">{{ product.lineDetails.number }}</td>
+						<td class="text-left"><input type="text" class="form-control" name="qty" placeholder="qty" value="{{ product.quantity }}"/><input type="hidden" name="product_id" value="{{ product.itemId }}"/></td>
+						<td class="text-left">{{ product.unitPrice }}</td>
+						<td class="text-left">{{ product.amountExcludingTax }}</td>
+						<td class="text-right" style="white-space: nowrap;"><button style="font-size: 10px; line-height: 24px;" data-toggle="tooltip" title="{{ button_reorder }}" class="btn btn-primary btn-reorder"><i class="fa fa-shopping-cart"></i></butoon></td>
+					</tr>
+					{% elseif product.lineType == 'Comment' %}
+					<tr>
+						<td class="text_left">{{ product.lineType }}</td>
+						<td class="text-left" colspan="5">{{ product.description }}</td>
+					</tr>
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+			</tbody>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 text-left">{{ pagination }}</div>
+			<!--<div class="col-sm-6 text-right">{{ results }}</div>-->
+		</div> 
+		{% else %}
+		<p>{{ text_empty }}</p>
+		{% endif %}
+		<br><br><br>
+		<div class="buttons clearfix">
+			<div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+		</div>
+		{{ content_bottom }}</div>
+		{{ column_right }}</div>
+	</div>
+	{{ footer }}
+
+<script>
+	$(".btn-reorder").on("click", function () { 
+		var qty = 0;
+		var product_id = 0;
+		var order_id = 0;
+
+		$(this).closest("tr").find("input[name=\'qty\']").each(function() {
+			qty = this.value;
+		});
+		$(this).closest("tr").find("input[name=\'product_id\']").each(function() {
+			product_id = this.value;
+		});
+		$(this).closest("tr").find("input[name=\'order_id\']").each(function() {
+			order_id = this.value;
+		});
+
+		cart.add(product_id, qty);
+	});
+</script>

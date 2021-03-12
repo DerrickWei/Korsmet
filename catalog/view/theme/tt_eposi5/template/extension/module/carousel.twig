@@ -1,0 +1,57 @@
+<div class="brand-slider">
+  <div class="owl-container">
+  <div id="banner{{ module }}" class="owl-carousel owl-theme">
+	{% for banner in banners %}
+      <div class="item">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />{% endif %}</div>
+    {% endfor %}
+  </div>
+  </div>
+</div>
+<script >
+$(document).ready(function() { 
+  $("#banner{{ module }}").owlCarousel({
+	autoplaySpeed: 1000,
+	navSpeed: 1000,
+	dotsSpeed:1000,
+    items : 5,
+	autoplay : false,
+	nav: true,
+	dots: false,
+	autoplayHoverPause : false,
+	margin: 0,
+	responsive:{
+		0:{
+			items:2,
+			nav: false
+		},
+		480:{
+			items: 3,
+			nav: false
+		},
+		768:{
+			items: 4
+		},
+		992:{
+			items: 4
+		},
+		1200:{
+			items: 5
+		},
+	},
+	onInitialized: function() {
+		owlAction();
+	},
+	onTranslated: function() {
+		owlAction();
+	}
+  });
+  function owlAction() {
+	$(".owl-featured-categories .owl-item").removeClass('first');
+	$(".owl-featured-categories .owl-item").removeClass('last');
+	$(".owl-featured-categories .owl-item").removeClass('before-active');
+	$(".owl-featured-categories .owl-item.active:first").addClass('first');
+	$(".owl-featured-categories .owl-item.active:last").addClass('last');
+	$('.owl-featured-categories .owl-item.active:first').prev().addClass('before-active');
+	}
+});
+</script>

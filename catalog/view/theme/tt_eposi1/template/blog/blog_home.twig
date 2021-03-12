@@ -1,0 +1,87 @@
+<div id="blog_home" class="menu-recent">
+	<div>
+		<div class="blog-title module-title">
+		   <h2>{{ text_headingtitle }}</h2>
+		   {% if module_description and 0 %}
+			   <div class="module-description">
+					<p>{{ module_description }}</p>
+			   </div>
+		   {% endif %}
+		</div>
+	 	{% set count, rows = 0, slide.rows %}
+		{% if not rows %}
+			{% set rows = 1 %}
+		{% endif %}
+		<div class="box-style">
+		{% if articles %}
+			<div class="owl-container">
+			<div class="articles-container owl-carousel owl-theme">
+			{% for article in articles %}
+				{% if count % rows == 0 %}
+				<div class="row_items">
+				{% endif %}
+				{% set count = count + 1 %}
+					<div class="articles-inner ">
+						<div class="articles-image">
+							<a href="{{ article.href }}"><img src="{{ article.image }}" alt="{{ article.name }}"/><span class="icon-view"></span></a>
+							<p class="date-time-post">
+								<span class="year-post">{{ article.date_added_y }}</span>
+								<span class="month-post">{{ article.date_added_m }}</span>
+								<span class="date-post">{{ article.date_added_d }}</span>
+							</p>
+						</div>	
+						<div class="aritcles-content">
+							<div class="content-inner">
+								<a class="articles-name" href="{{ article.href }}">{{ article.name }}</a>
+								<p class="author-name">{{ text_post_by }}<span>{{ article.author }}</span></p>
+								{% if article.intro_text %}<div class="articles-intro">{{ article.intro_text }}</div>{% endif %}
+								<a class="read-more" href="{{ article.href }}">{{ button_read_more }}</a>
+							</div>
+						</div>
+					</div>
+				{% if (count % rows == 0) or (count == articles|length ) %}
+				</div>
+				{% endif %}
+			{% endfor %}
+			</div>
+			</div>
+		{% else %}
+			<p>{{ text_empty }}</p>
+		{% endif %}
+		</div>
+	</div>
+</div>
+<script >
+    $(document).ready(function() {
+        $(".articles-container").owlCarousel({
+            autoPlay : {% if slide.auto %} true {% else %} false {% endif %},
+        	items : {{ slide['items'] }},
+			margin: 0,
+			loop: false,			
+			navSpeed : {{ slide['speed'] }},
+			dotsSpeed : {{ slide['speed'] }},
+			autoplaySpeed : {{ slide['speed'] }},
+			nav : {% if slide.navigation %} true {% else %} false {% endif %},
+			dots : {% if slide.pagination %} true {% else %} false {% endif %},
+			responsive:{
+				0:{
+					items: 1,
+					nav: false
+				},
+				480:{
+					items: 2,
+					nav: false
+				},
+				768:{
+					items: 2
+				},
+				992:{
+					items: 3
+				},
+				1200:{
+					items: {{ slide['items'] }}
+				}
+			}
+    	});
+    });
+</script>

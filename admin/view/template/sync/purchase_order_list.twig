@@ -1,0 +1,65 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+		</div>
+	</div>
+	<div class="container-fluid" id="sync_content">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-list"></i> {{ text_result }}</h3>
+			</div>
+			<div class="panel-body">	
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <td class="text-left">{{ column_number }}</td>
+                                <td class="text-left">{{ column_vendor }}</td>
+                                <td class="text-left">{{ column_date }}</td>
+                                <td class="text-right">{{ column_print }}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if purchase_orders %}
+                                {% for purchase_order in purchase_orders %}
+                                <tr>
+                                    <td class="text-left">{{ purchase_order.No }}</td>
+                                    <td class="text-left">{{ purchase_order.Buy_from_Vendor_Name }}</td>
+                                    <td class="text-left">{{ purchase_order.Posting_Date }}</td>
+                                    <td class="text-right">
+                                        <a href="{{ print_url }}&purchase_order={{ purchase_order.No }}" target="_blank" data-toggle="tooltip" title="{{ button_print }}" class="btn btn-primary"><i class="fa fa-print"></i></a>
+                                        <a href="{{ export_url }}&purchase_order={{ purchase_order.No }}" target="_blank" data-toggle="tooltip" title="{{ button_export }}" class="btn btn-success"><i class="fa fa-sign-out"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}
+
+<script type="text/javascript">
+
+
+</script>

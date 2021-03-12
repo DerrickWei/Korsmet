@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>{{ text_purchase_order }} - {{ purchase_order.No }}</title>
+<link href="view/javascript/bootstrap/css/bootstrap.css" rel="stylesheet" media="all" />
+<script type="text/javascript" src="view/javascript/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="view/javascript/bootstrap/js/bootstrap.min.js"></script>
+<link href="view/javascript/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" href="view/stylesheet/stylesheet.css" rel="stylesheet" media="all" />
+</head>
+<body>
+
+<div class="container" style="width: 85%; margin-top: 2%;">
+  	<div style="page-break-after: always;">
+    	<h1>{{ text_purchase_order }}</h1>
+        <h4>{{ text_purchase_order }}: {{ purchase_order.No }}</h4>
+        <h4>{{ text_purchase_order_date }}: {{ purchase_order.Order_Date }}</h4>
+        <br />
+		<table class="table table-borderless" style="display: none;">
+			<tbody>
+				<tr>
+					<td style="width: 50%;">
+                        {{ text_to }}:
+						<address><b>{{ purchase_order.Pay_to_Name }} </b><br />
+						{{ purchase_order.Pay_to_Address }} <br />
+                        {{ purchase_order.Pay_to_Address_2 }} <br />
+                        {{ purchase_order.Pay_to_City }}, {{ purchase_order.Pay_to_Post_Code }}
+                        {{ purchase_order.Pay_to_County }}</address>
+					</td>
+					<td style="width: 50%;">
+                        {{ text_ship_to }}: 
+						<address><b>{{ purchase_order.Ship_to_Name }} </b><br />
+						{{ purchase_order.Ship_to_Contact }} <br />
+                        {{ purchase_order.Ship_to_Address }} <br />
+                        {{ purchase_order.Ship_to_City }}, {{ purchase_order.Ship_to_Post_Code }}
+                        {{ purchase_order.Ship_to_County }} {{ purchase_order.Ship_to_Country_Region_Code }}</address>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-borderless" style="display: none;">
+			<tbody>
+				<tr>
+					<td style="width: 50%;">
+                        {{ text_terms }}: {{ purchase_order.Prepmt_Payment_Terms_Code }} <br />
+                        {{ text_receive_by }}: {{ purchase_order.Expected_Receipt_Date }}
+                    </td>
+					<td style="width: 50%;">
+                        {{ text_purchase_code }}: {{ purchase_order.Purchaser_Code }} <br />
+                        {{ text_vendor }}: {{ purchase_order.Buy_from_Vendor_No }}
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+				<td></td>
+				<td><b>{{ column_number }}</b></td>
+				<td><b>{{ column_name }}</b></td>
+				<td class="text-right"><b>Unit Price</b></td>
+				<td class="text-right"><b>Shelf No.</b></td>
+				<td class="text-right"><b>Vendor Item No.</b></td>
+				<td class="text-right"><b>{{ column_quantity }}</b></td>
+				<td class="text-right"><b>Outstanding Quantity</b></td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for line in lines %}
+				<tr>
+					<td>{% if line.image %}<img alt="Embedded Image" src="data:image/jpeg;base64,{{ line.image }}" width="100px;" height="100px;"/>{% endif %}</td>
+					<td style="font-size: 18px;">{{ line.No }}</td>
+					<td style="font-size: 18px;">{{ line.Description }}</td>
+					<td class="text-right" style="font-size: 18px;">{{ line.unit_price }}</td>
+					<td class="text-right" style="font-size: 18px;">{{ line.Shelf_No }}</td>
+					<td class="text-right" style="font-size: 18px;">{{ line.Vendor_Item_No  }}</td>
+					<td class="text-right" style="font-size: 18px;">{{ line.Quantity }}</td>
+                    <td class="text-right" style="font-size: 18px;">{{ line.Outstanding_Qty }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+  	</div>
+</div>
+</body>
+</html> 

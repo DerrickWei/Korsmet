@@ -1,0 +1,37 @@
+<div class="testimonial-container">
+	<img src="https://www.korsmet.com/image/catalog/map_3.jpg">
+</div><!--testimonial-container-->					
+<script >
+$(document).ready(function() {
+    $("#slides").owlCarousel({
+		autoPlay : {% if slide['auto'] %} {{ slide['auto'] }} {% else %} false {% endif %},
+			
+		loop: false,
+		margin: 0,
+		navSpeed : {{ slide['speed'] }},
+		dotsSpeed : {{ slide['speed'] }},
+		autoplaySpeed : {{ slide['speed'] }},
+		nav : {% if slide['navigation'] %} true  {% else %} false {% endif %},
+		dots :{% if slide['pagination'] %} true {% else %} false {% endif %},
+		lazyLoad: true,
+		navText : ['<i class="ion-ios-arrow-left"></i>','<i class="ion-ios-arrow-right"></i>'],
+		responsive:{
+			0:{
+				items: 1
+			},
+			480:{
+				items: 1
+			},
+			768:{
+				items: 1
+			},
+			992:{
+				items: 1
+			},
+			1200:{
+				items : {{ slide['items'] }}
+			}
+		}
+    });
+});
+</script>
